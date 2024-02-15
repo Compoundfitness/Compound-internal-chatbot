@@ -1,0 +1,32 @@
+function sendMessage() {
+    var input = document.getElementById("user-input");
+    var message = input.value.trim();
+    if (message !== "") {
+        displayMessage("You: " + message, "user");
+        // Replace the URL below with your chatbot's API endpoint
+        fetch('https://your.chatbot.api/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message: message }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            displayMessage("Bot: " + data.response, "bot");
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+        input.value = ""; // Clear input after sending
+    }
+}
+
+function displayMessage(message, sender) {
+    var chatBox = document.getElementById("chat-box");
+    var messageElement = document.createElement("div");
+    messageElement.textContent = message;
+    messageElement.className = sender;
+    chatBox.appendChild(messageElement);
+    chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+}
